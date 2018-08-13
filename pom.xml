@@ -353,6 +353,7 @@
                             <directory>${basedir}/pinyougou-sellergoods-service/target</directory>
                             <followSymlinks>false</followSymlinks>
                         </fileset>
+
                         <fileset>
                             <directory>${basedir}/pinyougou-sellergoods-interface/target</directory>
                             <followSymlinks>false</followSymlinks>
