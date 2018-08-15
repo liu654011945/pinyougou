@@ -1,13 +1,12 @@
 package com.pinyougou.manager.controller;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.pinyougou.pojo.TbBrand;
-import com.pinyougou.sellergoods.service.BrandService;
+import com.pinyougou.pojo.TbPayLog;
+import com.pinyougou.sellergoods.service.PayLogService;
 
 import entity.PageResult;
 import entity.Result;
@@ -17,19 +16,19 @@ import entity.Result;
  *
  */
 @RestController
-@RequestMapping("/brand")
-public class BrandController {
+@RequestMapping("/payLog")
+public class PayLogController {
 
 	@Reference
-	private BrandService brandService;
+	private PayLogService payLogService;
 	
 	/**
 	 * 返回全部列表
 	 * @return
 	 */
 	@RequestMapping("/findAll")
-	public List<TbBrand> findAll(){			
-		return brandService.findAll();
+	public List<TbPayLog> findAll(){			
+		return payLogService.findAll();
 	}
 	
 	
@@ -39,18 +38,18 @@ public class BrandController {
 	 */
 	@RequestMapping("/findPage")
 	public PageResult  findPage(int page,int rows){			
-		return brandService.findPage(page, rows);
+		return payLogService.findPage(page, rows);
 	}
 	
 	/**
 	 * 增加
-	 * @param brand
+	 * @param payLog
 	 * @return
 	 */
 	@RequestMapping("/add")
-	public Result add(@RequestBody TbBrand brand){
+	public Result add(@RequestBody TbPayLog payLog){
 		try {
-			brandService.add(brand);
+			payLogService.add(payLog);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,13 +59,13 @@ public class BrandController {
 	
 	/**
 	 * 修改
-	 * @param brand
+	 * @param payLog
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public Result update(@RequestBody TbBrand brand){
+	public Result update(@RequestBody TbPayLog payLog){
 		try {
-			brandService.update(brand);
+			payLogService.update(payLog);
 			return new Result(true, "修改成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,8 +79,8 @@ public class BrandController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
-	public TbBrand findOne(Long id){
-		return brandService.findOne(id);		
+	public TbPayLog findOne(String id){
+		return payLogService.findOne(id);		
 	}
 	
 	/**
@@ -90,9 +89,9 @@ public class BrandController {
 	 * @return
 	 */
 	@RequestMapping("/delete")
-	public Result delete(Long [] ids){
+	public Result delete(String [] ids){
 		try {
-			brandService.delete(ids);
+			payLogService.delete(ids);
 			return new Result(true, "删除成功"); 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -108,13 +107,8 @@ public class BrandController {
 	 * @return
 	 */
 	@RequestMapping("/search")
-	public PageResult search(@RequestBody TbBrand brand, int page, int rows  ){
-		return brandService.findPage(brand, page, rows);		
-	}
-
-	@RequestMapping("/selectOptionList")
-	public List<Map> selectOptionList(){
-		return brandService.findBrandList();
+	public PageResult search(@RequestBody TbPayLog payLog, int page, int rows  ){
+		return payLogService.findPage(payLog, page, rows);		
 	}
 	
 }

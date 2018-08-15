@@ -1,13 +1,12 @@
 package com.pinyougou.manager.controller;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.pinyougou.pojo.TbBrand;
-import com.pinyougou.sellergoods.service.BrandService;
+import com.pinyougou.pojo.TbSeckillOrder;
+import com.pinyougou.sellergoods.service.SeckillOrderService;
 
 import entity.PageResult;
 import entity.Result;
@@ -17,19 +16,19 @@ import entity.Result;
  *
  */
 @RestController
-@RequestMapping("/brand")
-public class BrandController {
+@RequestMapping("/seckillOrder")
+public class SeckillOrderController {
 
 	@Reference
-	private BrandService brandService;
+	private SeckillOrderService seckillOrderService;
 	
 	/**
 	 * 返回全部列表
 	 * @return
 	 */
 	@RequestMapping("/findAll")
-	public List<TbBrand> findAll(){			
-		return brandService.findAll();
+	public List<TbSeckillOrder> findAll(){			
+		return seckillOrderService.findAll();
 	}
 	
 	
@@ -39,18 +38,18 @@ public class BrandController {
 	 */
 	@RequestMapping("/findPage")
 	public PageResult  findPage(int page,int rows){			
-		return brandService.findPage(page, rows);
+		return seckillOrderService.findPage(page, rows);
 	}
 	
 	/**
 	 * 增加
-	 * @param brand
+	 * @param seckillOrder
 	 * @return
 	 */
 	@RequestMapping("/add")
-	public Result add(@RequestBody TbBrand brand){
+	public Result add(@RequestBody TbSeckillOrder seckillOrder){
 		try {
-			brandService.add(brand);
+			seckillOrderService.add(seckillOrder);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,13 +59,13 @@ public class BrandController {
 	
 	/**
 	 * 修改
-	 * @param brand
+	 * @param seckillOrder
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public Result update(@RequestBody TbBrand brand){
+	public Result update(@RequestBody TbSeckillOrder seckillOrder){
 		try {
-			brandService.update(brand);
+			seckillOrderService.update(seckillOrder);
 			return new Result(true, "修改成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,8 +79,8 @@ public class BrandController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
-	public TbBrand findOne(Long id){
-		return brandService.findOne(id);		
+	public TbSeckillOrder findOne(Long id){
+		return seckillOrderService.findOne(id);		
 	}
 	
 	/**
@@ -92,7 +91,7 @@ public class BrandController {
 	@RequestMapping("/delete")
 	public Result delete(Long [] ids){
 		try {
-			brandService.delete(ids);
+			seckillOrderService.delete(ids);
 			return new Result(true, "删除成功"); 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -108,13 +107,8 @@ public class BrandController {
 	 * @return
 	 */
 	@RequestMapping("/search")
-	public PageResult search(@RequestBody TbBrand brand, int page, int rows  ){
-		return brandService.findPage(brand, page, rows);		
-	}
-
-	@RequestMapping("/selectOptionList")
-	public List<Map> selectOptionList(){
-		return brandService.findBrandList();
+	public PageResult search(@RequestBody TbSeckillOrder seckillOrder, int page, int rows  ){
+		return seckillOrderService.findPage(seckillOrder, page, rows);		
 	}
 	
 }

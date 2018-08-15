@@ -1,8 +1,6 @@
 package com.pinyougou.sellergoods.service;
 import java.util.List;
-import java.util.Map;
-
-import com.pinyougou.pojo.TbBrand;
+import com.pinyougou.pojo.TbSeller;
 
 import entity.PageResult;
 /**
@@ -10,13 +8,13 @@ import entity.PageResult;
  * @author Administrator
  *
  */
-public interface BrandService {
+public interface SellerService {
 
 	/**
 	 * 返回全部列表
 	 * @return
 	 */
-	public List<TbBrand> findAll();
+	public List<TbSeller> findAll();
 	
 	
 	/**
@@ -29,13 +27,13 @@ public interface BrandService {
 	/**
 	 * 增加
 	*/
-	public void add(TbBrand brand);
+	public void add(TbSeller seller);
 	
 	
 	/**
 	 * 修改
 	 */
-	public void update(TbBrand brand);
+	public void update(TbSeller seller);
 	
 
 	/**
@@ -43,14 +41,14 @@ public interface BrandService {
 	 * @param id
 	 * @return
 	 */
-	public TbBrand findOne(Long id);
+	public TbSeller findOne(String id);
 	
 	
 	/**
 	 * 批量删除
 	 * @param ids
 	 */
-	public void delete(Long[] ids);
+	public void delete(String[] ids);
 
 	/**
 	 * 分页
@@ -58,13 +56,6 @@ public interface BrandService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(TbBrand brand, int pageNum, int pageSize);
-
-
-	/**
-	 * 查询所有的品牌列表数据  格式：[{id:1,text:"aadafsa"}]
-	 * @return
-	 */
-	public List<Map> findBrandList();
+	public PageResult findPage(TbSeller seller, int pageNum, int pageSize);
 	
 }
