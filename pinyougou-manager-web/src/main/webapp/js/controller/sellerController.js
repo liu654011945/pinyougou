@@ -1,5 +1,5 @@
  //控制层 
-app.controller('sellerController' ,function($scope,$controller   ,sellerService){	
+app.controller('sellerController' ,function($scope,$controller,sellerService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -64,7 +64,7 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 		);				
 	}
 	
-	$scope.searchEntity={};//定义搜索对象 
+	$scope.searchEntity={status:'0'};//定义搜索对象
 	
 	//搜索
 	$scope.search=function(page,rows){			
@@ -75,5 +75,17 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 			}			
 		);
 	}
+
+	$scope.updateStatus=function (sellerId,status) {
+		sellerService.updateStatus(sellerId,status).success(
+			function (response) {//Result
+				if(response.success){
+                    $scope.reloadList();//刷新列表
+				}else{
+					alert(response.message);
+				}
+            }
+		)
+    }
     
 });	

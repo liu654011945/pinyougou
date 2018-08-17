@@ -34,6 +34,13 @@ public interface SellerService {
 	 * 修改
 	 */
 	public void update(TbSeller seller);
+
+	/**
+	 * 根据商家的ID 更新状态
+	 * @param sellerId
+	 * @param status 1  2  3
+	 */
+	public void updateStauts(String sellerId,String status);
 	
 
 	/**

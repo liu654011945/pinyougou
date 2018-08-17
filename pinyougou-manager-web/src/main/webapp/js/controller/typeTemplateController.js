@@ -26,7 +26,13 @@ app.controller('typeTemplateController' ,function($scope,$controller   ,specific
 	$scope.findOne=function(id){				
 		typeTemplateService.findOne(id).success(
 			function(response){
-				$scope.entity= response;					
+				$scope.entity= response;
+                $scope.entity.brandIds=angular.fromJson( $scope.entity.brandIds);
+                $scope.entity.specIds=angular.fromJson( $scope.entity.specIds);
+                $scope.entity.customAttributeItems=angular.fromJson($scope.entity.customAttributeItems);
+				// $scope.brandList={data:[]}
+
+
 			}
 		);				
 	}
