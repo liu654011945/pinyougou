@@ -1,5 +1,11 @@
 package com.pinyougou.sellergoods.service.impl;
 import java.util.List;
+import java.util.Map;
+
+import com.alibaba.fastjson.JSON;
+import com.pinyougou.mapper.TbSpecificationOptionMapper;
+import com.pinyougou.pojo.TbSpecificationOption;
+import com.pinyougou.pojo.TbSpecificationOptionExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -22,6 +28,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 
 	@Autowired
 	private TbTypeTemplateMapper typeTemplateMapper;
+
+	@Autowired
+	private TbSpecificationOptionMapper optionMapper;
 	
 	/**
 	 * 查询全部
@@ -105,5 +114,22 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 		Page<TbTypeTemplate> page= (Page<TbTypeTemplate>)typeTemplateMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
+	//[{"id":27,"text":"网络",options:[{},{}]},{"id":32,"text":"机身内存"}]
+    @Override
+    public List<Map> findSpecList(Long typeTemplateId) {
+		TbTypeTemplate tbTypeTemplate = typeTemplateMapper.selectByPrimaryKey(typeTemplateId);
+		String specIds = tbTypeTemplate.getSpecIds();//这是规格的数据 [{"id":27,"text":"网络"},{"id":32,"text":"机身内存"}]
+		List<Map> mapList = JSON.parseArray(specIds, Map.class);//
+
+		for (Map map : mapList) {//map:{"id":27,"text":"网络"}
+			Long specId = Long.valueOf((Integer)map.get("id"));
+			TbSpecificationOptionExample exmaple = new TbSpecificationOptionExample();
+			exmaple.createCriteria().andSpecIdEqualTo(specId);
+			List<TbSpecificationOption> options = optionMapper.selectByExample(exmaple);//select * from option where specid=27
+			map.put("options",options);
+		}
+		return mapList;
+    }
+
 }

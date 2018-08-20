@@ -49,5 +49,25 @@ app.controller('baseController' ,function($scope){
 		}
 		return str;
     }
+
+    /**
+	 *
+     * @param list
+	 * [
+        {"attributeValue":["移动3G","移动4G"],"attributeName":"网络"},
+     	{"attributeValue":["16G","32G"],"attributeName":"机身内存"}
+     ]
+     * @param specName   网络
+     * @param key  attributeName
+     */
+    $scope.searchObjectByKey=function(list,specName,key){
+		for(var i=0;i<list.length;i++){
+			var object =list[i];//{"attributeValue":["移动3G","移动4G"],"attributeName":"网络"}
+            if(object[key]==specName){
+            	return object;
+			}
+		}
+		return null;
+	}
 	
 });	
