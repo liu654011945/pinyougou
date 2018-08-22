@@ -1,34 +1,97 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller   ,typeTemplateService,itemCatService,uploadService,goodsService){
+app.controller('goodsController' ,function($scope,$controller ,$location  ,typeTemplateService,itemCatService,uploadService,goodsService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
 
-	
-
-	
 	//查询实体 
-	$scope.findOne=function(id){				
+	$scope.findOne=function(){
+		var id = $location.search()['id'];
 		goodsService.findOne(id).success(
 			function(response){
-				$scope.entity= response;					
+				$scope.entity= response;
+                editor.html($scope.entity.goodsDesc.introduction);
+				$scope.entity.goodsDesc.itemImages=angular.fromJson($scope.entity.goodsDesc.itemImages);
+				$scope.entity.goodsDesc.customAttributeItems=angular.fromJson($scope.entity.goodsDesc.customAttributeItems);
+                $scope.entity.goodsDesc.specificationItems=angular.fromJson($scope.entity.goodsDesc.specificationItems);
+                var itemList = $scope.entity.itemList;//[{id,spec:{}   }]
+
+				for(var i=0;i<itemList.length;i++){
+                    itemList[i].spec=angular.fromJson(itemList[i].spec)
+				}
+
+
 			}
 		);				
 	}
 	
+	$scope.checkAttributeValue=function (specName,specValue) {
+		//1.将根据传递过来的规格的名称 查找对象
+        var specificationItems = $scope.entity.goodsDesc.specificationItems;
+        var object = $scope.searchObjectByKey(specificationItems,specName,'attributeName');
+
+        if(object==null){
+        	return false;
+		}else{
+        	//查询 attributeValue 里面是否有选项的值
+           if(object.attributeValue.indexOf(specValue)!=-1){
+           		return true;
+		   }else{
+           		return false;
+		   }
+		}
+    }
+	
+	
+	
+	
+
+    $scope.searchEntity={};//定义搜索对象
+
+    //搜索
+    $scope.search=function(page,rows){
+        goodsService.search(page,rows,$scope.searchEntity).success(
+            function(response){
+                $scope.list=response.rows;
+                $scope.paginationConf.totalItems=response.total;//更新总记录数
+            }
+        );
+    }
+
+    $scope.status=['未审核','已审核','审核未通过','已关闭'];
+
+    
+    //在页面一加载的时候查询所有的分类
+   $scope.itemCatList=[];
+	$scope.findItemCatAllList=function () {
+        itemCatService.findAll().success(
+        	function (response) {//List<itemcat>
+				for(var i=0;i<response.length;i++){
+                    $scope.itemCatList[response[i].id]=response[i].name;
+				}
+            }
+		)
+    }
+
+
+
 	//保存 
-	$scope.save=function(){				
-		var serviceObject;//服务层对象  				
-		if($scope.entity.id!=null){//如果有ID
+	$scope.save=function(){
+		var serviceObject;//服务层对象
+		if($scope.entity.goods.id!=null){//如果有ID
 			serviceObject=goodsService.update( $scope.entity ); //修改  
 		}else{
+            var htmltext = editor.html();
+            $scope.entity.goodsDesc.introduction=htmltext;
 			serviceObject=goodsService.add( $scope.entity  );//增加 
 		}				
 		serviceObject.success(
 			function(response){
 				if(response.success){
-					//重新查询 
-		        	$scope.reloadList();//重新加载
+					//重新查询
+                    $scope.entity={};//清空
+                    editor.html('');
+                    window.location.href="goods.html";
 				}else{
 					alert(response.message);
 				}
@@ -128,7 +191,10 @@ app.controller('goodsController' ,function($scope,$controller   ,typeTemplateSer
                 function (response) {//typeTemplate
                     $scope.typeTemplate=response;
                     $scope.typeTemplate.brandIds=angular.fromJson($scope.typeTemplate.brandIds);
-                    $scope.entity.goodsDesc.customAttributeItems=angular.fromJson($scope.typeTemplate.customAttributeItems);
+                    //没有id值说明要添加商品
+                    if($location.search()['id']==null || $location.search()['id']==undefined){
+                        $scope.entity.goodsDesc.customAttributeItems=angular.fromJson($scope.typeTemplate.customAttributeItems);
+                    }
                 }
             );
 

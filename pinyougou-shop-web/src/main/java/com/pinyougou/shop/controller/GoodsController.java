@@ -6,6 +6,7 @@ import com.pinyougou.pojogroup.Goods;
 import com.pinyougou.sellergoods.service.GoodsService;
 import entity.PageResult;
 import entity.Result;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,6 +52,8 @@ public class GoodsController {
 	@RequestMapping("/add")
 	public Result add(@RequestBody Goods goods){
 		try {
+			String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+			goods.getGoods().setSellerId(sellerId);
 			goodsService.add(goods);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {
@@ -65,8 +68,14 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public Result update(@RequestBody TbGoods goods){
+	public Result update(@RequestBody Goods goods){
 		try {
+			String sellerId=SecurityContextHolder.getContext().getAuthentication().getName();
+			goods.getGoods().setSellerId(sellerId);
+			Goods goodsfromdb = goodsService.findOne(goods.getGoods().getId());
+			if(!goodsfromdb.getGoods().getSellerId().equals(sellerId)){
+				return new Result(false,"非法操作");
+			}
 			goodsService.update(goods);
 			return new Result(true, "修改成功");
 		} catch (Exception e) {
@@ -81,7 +90,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
-	public TbGoods findOne(Long id){
+	public Goods findOne(Long id){
 		return goodsService.findOne(id);		
 	}
 	
@@ -103,13 +112,15 @@ public class GoodsController {
 	
 		/**
 	 * 查询+分页
-	 * @param brand
+	 * @param
 	 * @param page
 	 * @param rows
 	 * @return
 	 */
 	@RequestMapping("/search")
 	public PageResult search(@RequestBody TbGoods goods, int page, int rows  ){
+		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+		goods.setSellerId(sellerId);//查询当前的商家的所有的商品的列表
 		return goodsService.findPage(goods, page, rows);		
 	}
 	

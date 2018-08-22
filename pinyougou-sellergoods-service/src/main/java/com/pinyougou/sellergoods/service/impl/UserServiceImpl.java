@@ -11,6 +11,7 @@ import com.pinyougou.pojo.TbUserExample.Criteria;
 import com.pinyougou.sellergoods.service.UserService;
 
 import entity.PageResult;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 服务实现层
@@ -18,6 +19,7 @@ import entity.PageResult;
  *
  */
 @Service
+
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -44,6 +46,8 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * 增加
 	 */
+
+
 	@Override
 	public void add(TbUser user) {
 		userMapper.insert(user);		

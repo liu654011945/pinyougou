@@ -35,7 +35,7 @@
 
     </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="findItemCat1List()">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="findItemCat1List();findOne()">
 
             <!-- 正文区域 -->
             <section class="content">
@@ -188,13 +188,12 @@
                             	<div class="row data-type">
 	                            	<div class="col-md-2 title">是否启用规格</div>
 			                        <div class="col-md-10 data">
-			                        	<input type="checkbox" >
-			                            <button type="button" class="btn btn-default" title="自定义规格" data-target="#mySpecModal"  data-toggle="modal"  ><i class="fa fa-file-o"></i> 自定义规格</button>               
+			                        	<input type="checkbox" ng-model="entity.goods.isEnableSpec" ng-true-value="1" ng-false-value="0">
 			                        </div>
                             	</div>
                             	<p>
                             	
-                            	<div>
+                            	<div ng-if="entity.goods.isEnableSpec=='1'">
                             	
 	                                <div class="row data-type">
 	                                
@@ -202,7 +201,7 @@
 			                                <div class="col-md-2 title">{{spec.text}}</div>
 					                        <div class="col-md-10 data">
 					                            <span ng-repeat="option in spec.options">
-					                            	<input  type="checkbox" ng-click="updateSpecAttribute($event,spec.text,option.optionName);createItemList()" >{{option.optionName}}
+					                            	<input  type="checkbox" ng-checked="checkAttributeValue(spec.text,option.optionName)" ng-click="updateSpecAttribute($event,spec.text,option.optionName);createItemList()" >{{option.optionName}}
 					                            </span>  	
 					                        </div>
 		                                </div>   
@@ -257,7 +256,7 @@
                  	
                    </div>
                   <div class="btn-toolbar list-toolbar">
-				      <button class="btn btn-primary" ng-click="add()"><i class="fa fa-save"></i>保存</button>
+				      <button class="btn btn-primary" ng-click="save()"><i class="fa fa-save"></i>保存</button>
 				      <button class="btn btn-default" ng-click="goListPage()">返回列表</button>
 				  </div>
 			

@@ -34,7 +34,7 @@ public interface GoodsService {
 	/**
 	 * 修改
 	 */
-	public void update(TbGoods goods);
+	public void update(Goods goods);
 	
 
 	/**
@@ -42,7 +42,7 @@ public interface GoodsService {
 	 * @param id
 	 * @return
 	 */
-	public TbGoods findOne(Long id);
+	public Goods findOne(Long id);
 	
 	
 	/**
@@ -58,5 +58,13 @@ public interface GoodsService {
 	 * @return
 	 */
 	public PageResult findPage(TbGoods goods, int pageNum, int pageSize);
+
+
+	/**
+	 * 更新指定的商品（SPU的ID数组）
+	 * @param ids
+	 * @param status  指定的状态  0 未审核  1 已审核  2 审核未通过 3 已关闭
+	 */
+	public void updateStatus(Long[] ids,String status);
 	
 }
