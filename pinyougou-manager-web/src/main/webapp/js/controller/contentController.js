@@ -1,5 +1,5 @@
  //控制层 
-app.controller('contentController' ,function($scope,$controller   ,contentService){	
+app.controller('contentController' ,function($scope,$controller   ,uploadService,contentService,contentCategoryService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -75,5 +75,32 @@ app.controller('contentController' ,function($scope,$controller   ,contentServic
 			}			
 		);
 	}
+
+	$scope.status=['无效','有效'];
+	
+	
+
+	//
+	$scope.findAllContentCategory=function () {
+		contentCategoryService.findAll().success(
+			function (response) {//List<contentCategory>
+                $scope.contentCategoryList=response;
+            }
+		)
+    }
+
+
+    //上传图片
+    $scope.uploadFile=function () {
+        uploadService.uploadFile().success(
+            function (response) {//Result 带有 成功之后的图片的URL
+                if(response.success){
+                    $scope.entity.pic=response.message;
+                }else{
+                    alert("上传失败");
+                }
+            }
+        )
+    }
     
 });	

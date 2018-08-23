@@ -34,6 +34,12 @@
             <artifactId>pinyougou-sellergoods-interface</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.pinyougou</groupId>
+            <artifactId>pinyougou-content-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.pinyougou</groupId>
             <artifactId>pinyougou-common</artifactId>
@@ -115,6 +121,7 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
         </dependency>
+
 
 
 
