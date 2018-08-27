@@ -17,6 +17,7 @@ import com.pinyougou.pojo.TbTypeTemplateExample.Criteria;
 import com.pinyougou.sellergoods.service.TypeTemplateService;
 
 import entity.PageResult;
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * 服务实现层
@@ -86,7 +87,10 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 			typeTemplateMapper.deleteByPrimaryKey(id);
 		}		
 	}
-	
+
+
+	@Autowired
+	private RedisTemplate redisTemplate;
 	
 		@Override
 	public PageResult findPage(TbTypeTemplate typeTemplate, int pageNum, int pageSize) {
@@ -110,8 +114,25 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 			}
 	
 		}
-		
-		Page<TbTypeTemplate> page= (Page<TbTypeTemplate>)typeTemplateMapper.selectByExample(example);		
+		//紧跟着的第一个查询才会分页
+		Page<TbTypeTemplate> page= (Page<TbTypeTemplate>)typeTemplateMapper.selectByExample(example);
+
+			//模板的数据更新时需要存储到reids中
+
+			List<TbTypeTemplate> all = findAll();//查询所有的模板数据
+			for (TbTypeTemplate tbTypeTemplate : all) {
+				List<Map> mapList = JSON.parseArray(tbTypeTemplate.getBrandIds(), Map.class);
+				//存储品牌列表
+				redisTemplate.boundHashOps("brandList").put(tbTypeTemplate.getId(),mapList);
+				List<Map> specList = findSpecList(tbTypeTemplate.getId());////[{"id":27,"text":"网络",options:[{},{}]},{"id":32,"text":"机身内存"}]
+				//存储规格列表
+				redisTemplate.boundHashOps("specList").put(tbTypeTemplate.getId(),specList);
+
+			}
+
+
+
+
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 

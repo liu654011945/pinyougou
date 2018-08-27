@@ -113,6 +113,9 @@ public class ItemCatController {
 
 	@RequestMapping("/findByParentId")
 	public List<TbItemCat> findByParentId(Long parentId){
+
+		//存储数据  1.加入依赖 2 配置 3.redisTemplate
+
 		return itemCatService.findByParentId(parentId);
 	}
 	
